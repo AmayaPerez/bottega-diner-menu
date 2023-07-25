@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+    <title>Bottega Diner</title>
+</head>
+<body>
+    
+</body>
+<script>
+const breakfastMenu = [
+  {
+    id: 1,
+    name: "Eggs and Bacon",
+    price: 6.99,
+     
+  },
+  {
+    id: 2,
+    name: "Omelette",
+    price: 7.99,
+     
+  },
+  {
+    id: 3,
+    name: "Pancakes",
+    price: 5.99,
+      
+  },
+  {  
+    id: 4,
+    name: "Breakfast Burrito",
+    price: 8.99,
+      
+  },
+  {
+    id: 5,
+    name: "French Toast",
+    price: 5.99,
+      
+  }
+];
+
+const lunchMenu = [
+  {
+    id: 1,
+    name: "Cheeseburger",
+    price: 9.99,
+     
+  },
+  {
+    id: 2,
+    name: "Chicken Sandwich",
+    price: 8.99,
+      
+  },
+  {
+    id: 3,
+    name: "Fish and Chips",
+    price: 10.99,
+     
+  },
+  {
+    id: 4,
+    name: "Spaghetti Bolognese",
+    price: 11.99,
+     
+  },
+  {
+    id: 5,
+    name: "Caesar Salad",
+    price: 7.99,
+     
+  }
+];
+
+const dinnerMenu = lunchMenu.map(item => ({ ...item, price: item.price + 3 }));
+
+
+// Function to get a random comment from the waiter
+const getRandomComment = () => {
+  const comments = [
+    "Excellent choice!",
+    "Our chef recommends this dish!",
+    "A classic favorite!",
+    "Nice choice!",
+    "That is my favorite!",
+    "I'll have the cook make it the way you want it!",
+    "That sounds good!"
+  ];
+  const randomIndex = Math.floor(Math.random() * comments.length);
+  return comments[randomIndex];
+};
+
+// Function to prompt the user for menu selection
+const getMenuSelection = () => {
+  const selection = parseInt(prompt("Which menu would you like to choose?\n1. Breakfast\n2. Lunch\n3. Dinner"));
+  switch (selection) {
+    case 1:
+      return { menu: breakfastMenu, menuType: "Breakfast" };
+    case 2:
+      return { menu: lunchMenu, menuType: "Lunch" };
+    case 3:
+      return { menu: dinnerMenu, menuType: "Dinner" };
+    default:
+      console.log("Invalid selection. Please try again.");
+      return getMenuSelection();
+  }
+};
+
+// Function to display the menu options
+const displayMenuOptions = (menu) => {
+  console.log("Menu options:");
+  menu.forEach(item => console.log(`${item.id}. ${item.name}`));
+  console.log();
+};
+
+// Function to select an item and get a comment
+const selectItem = (menu, itemType) => {
+  const itemId = parseInt(prompt(`Select a ${itemType} by entering its ID:`));
+  const selectedItem = menu.find(item => item.id === itemId);
+  if (selectedItem) {
+    console.log(`You selected: ${selectedItem.name}`);
+    console.log(`Price: $${selectedItem.price.toFixed(2)}`);
+    console.log(getRandomComment());
+    return selectedItem;
+  } else {
+    console.log("Invalid selection. Please try again.");
+    return selectItem(menu, itemType);
+  }
+};
+
+// Call the function to prompt the user for menu selection
+const { menu, menuType } = getMenuSelection();
+
+// Display the chosen menu options
+displayMenuOptions(menu);
+
+// Select an item from the chosen menu
+const mainItem = selectItem(menu, "menu item");
+
+// Select two side items for lunch or dinner
+let sideItems = [];
+if (menuType !== "Breakfast") {
+  const sidesMenu = [
+    { id: 1, name: "French Fries", price: 2.75 },
+    { id: 2, name: "Onion Rings", price: 3.35 },
+    { id: 3, name: "Coleslaw", price: 2.50 },
+    { id: 4, name: "Garlic Bread", price: 2.40 },
+    { id: 5, name: "Chicken nugget", price: 3.20 }
+  ];
+  console.log("Side options:");
+  sidesMenu.forEach(item => console.log(`${item.id}. ${item.name}`));
+  console.log();
+  for (let i = 0; i < 2; i++) {
+    const sideItem = selectItem(sidesMenu, "side item");
+    sideItems.push(sideItem);
+  }
+}
+
+
+
+// Calculate and display the total cost
+let totalCost = mainItem.price;
+sideItems.forEach(sideItem => {
+  totalCost += sideItem.price;
+});
+console.log("Total Cost: $" + totalCost.toFixed(2));
+
+</script>
+</html>
